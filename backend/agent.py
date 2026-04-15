@@ -20,7 +20,7 @@ Keep all responses to 1-3 sentences, try to keep them short and around 1 sentenc
 
 class KodaAgent:
     def __init__(self) -> None:
-        self._client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+        self._client = anthropic.AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
     async def chat(self, messages: list[dict], user_message: str) -> str:
         """
@@ -33,7 +33,7 @@ class KodaAgent:
         convo = list(messages) + [{"role": "user", "content": user_message}]
 
         while True:
-            response = self._client.messages.create(
+            response = await self._client.messages.create(
                 model="claude-opus-4-6",
                 max_tokens=1024,
                 system=SYSTEM_PROMPT,
