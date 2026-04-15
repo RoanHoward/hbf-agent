@@ -128,26 +128,19 @@ async def run_search_hubbard_brook(inputs: dict) -> str:
     if not query:
         return json.dumps({"error": "query is required"})
 
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-
-    # Use Claude with its built-in web_search tool
-    response = client.messages.create(
-        model="claude-opus-4-6",
-        max_tokens=512,
+    # Use Claude to synthesize an answer from known Hubbard Brook knowledge
+    client = anthropic.AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    response = await client.messages.create(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=256,
         system=(
-            f"Search hubbardbrook.org and related scientific sources for information about: "
-            f"{query}. Return only factual, sourced information in 3-5 sentences."
+            "You are a knowledgeable assistant for Hubbard Brook Experimental Forest. "
+            "Answer questions about Hubbard Brook ecology, research, history, and data "
+            "using your training knowledge. Be factual and concise (2-4 sentences)."
         ),
-        tools=[
-            {
-                "type": "web_search_20250305",
-                "name": "web_search",
-            }
-        ],
         messages=[{"role": "user", "content": query}],
     )
 
-    # Extract final text block
     text_blocks = [b.text for b in response.content if hasattr(b, "text")]
     result_text = " ".join(text_blocks).strip() or "No results found."
     return json.dumps({"result": result_text})

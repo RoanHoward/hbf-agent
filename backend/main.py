@@ -74,6 +74,7 @@ async def weather():
 
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest):
+    import traceback
     try:
         # Convert Pydantic models to plain dicts for the agent
         history = [{"role": m.role, "content": m.content} for m in req.messages]
@@ -81,4 +82,5 @@ async def chat(req: ChatRequest):
         reply = await agent.chat(history, req.message)
         return ChatResponse(response=reply)
     except Exception as exc:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(exc)) from exc
