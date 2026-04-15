@@ -1,6 +1,6 @@
 # HBF Agent
 
-A mock of the [Hubbard Brook Ecosystem Study](https://hubbardbrook.org) landing page with an embedded AI agent — Koda, an ancient Abenaki forest spirit — powered by live sensor data and Claude.
+A mock of the [Hubbard Brook Ecosystem Study](https://hubbardbrook.org) landing page with an embedded AI agent, Koda, an ancient Abenaki forest spirit, powered by live sensor data and Claude API.
 
 ## Architecture
 
